@@ -1,0 +1,16 @@
+{% extends "tienda/base.html" %}
+
+{% block title %} Producto {% endblock %}
+
+{% block content %}
+<h1>¡Producto!</h1>
+<ul>
+    {% for p in productos %}
+    <li>
+        <a href="{% url 'tienda:detalle_producto' p.pk %}">{{p.nombre}}</a>
+        - ${{ p.precio|floatformat:2 }}
+    </li>
+    {%endfor%}
+</ul>
+{% endblock %}
+
