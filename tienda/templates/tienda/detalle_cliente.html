@@ -9,6 +9,11 @@
     <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
     <h3>Pedidos</h3>
     <ul>
+        <p>
+          <a href="{% url 'tienda:editar_cliente' cliente.pk %}" class="btn primary"> Editar cliente </a>
+          <a href="{% url 'tienda:eliminar_cliente' cliente.pk %}" class="btn primary"> Eliminar cliente </a>
+         </p>
+
         {% for p in cliente.pedidos.all %}
             <li>
                 <a href="{% url 'tienda:detalle_pedido' pk=p.pk %}">

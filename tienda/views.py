@@ -88,6 +88,18 @@ def editar_pedido_items(request, pk):
 
     return render(request, "tienda/editar_pedido_items.html", {"pedido_form": pedido_form, "formset": formset, "productos_dict": productos_dict})
 
+def crear_cliente(request):
+    if request.method == "POST":
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("tienda:lista_clientes")
+    else:
+        form = ClienteForm()
+
+    return render(request, "tienda/crear_cliente.html", { "form": form})
+
+
 def detalle_cliente(request, pk):
     cliente = get_object_or_404(Cliente,pk=pk)
     pedidos = cliente.pedidos.select_related("cliente").prefetch_related("productos").order_by("fecha")
@@ -99,6 +111,29 @@ def detalle_cliente(request, pk):
             "pedidos":pedidos
         }
     )
+def eliminar_cliente(request, pk):
+    cliente = get_object_or_404(Cliente, pk=pk)
+
+    if request.method == "POST":
+        cliente.delete()
+        return redirect("tienda:lista_clientes")
+
+    return render(request, "tienda/eliminar_cliente.html", {"cliente": cliente})
+
+def editar_cliente(request, pk):
+    cliente = get_object_or_404(Cliente, pk=pk)
+
+    if request.method == "POST":
+        form = ClienteForm (request.POST, instance=cliente)
+        if form.is_valid():
+            form.save()
+            return redirect("tienda:detalle_cliente", pk=cliente.pk)
+    else:
+        form = ClienteForm(instance=cliente)
+
+    return render(request, "tienda/editar_cliente.html", {"form": form, "cliente": cliente,})
+
+
 def lista_clientes(request):
     clientes = Cliente.objects.all().order_by("nombre")
     return render(request, "tienda/lista_clientes.html", {"clientes": clientes})
