@@ -1,0 +1,29 @@
+{% extends "tienda/base.html" %}
+
+{% block title %}Nuevo Pedido{% endblock %}
+
+{% block content %}
+<h1>Nuevo Pedido</h1>
+<form method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend>Datos del Pedido</legend>
+        {{ pedido_form.as_p }}
+    </fieldset>
+
+     <fieldset>
+        <legend>Items</legend>
+        {% for form in formset  %}
+            <div class="item">
+                {{ form.as_p }}
+                {% if form.non_field_errors  %}
+                    <label> {{ form.DELETE }}</label>
+                {% endif %}
+            </div>
+
+    </fieldset>
+    
+    
+    <button class="btn" type="submit">Guardar</button>
+    <a href="{% url 'tienda:lista_pedidos' %}" class="btn">Cancelar</a>
+</form>

@@ -4,16 +4,20 @@
 
 {% block content %}
 <h1>¡Pedidos!</h1>
+<p> 
+    <a href="{% url 'tienda:crear_pedido_items' %}" class="btn">Nuevo Pedido</a>
+</p>
 <ul>
     {% for p in pedidos %}
     <li>
-        <a href="{% url 'tienda:detalle_pedido' p.pk%}">
+        <a href="{% url 'tienda:detalle_pedido' p.pk%}"class="btn primary">
             Pedido #{{ p.id }}
             </a>
         -Cliente: {{p.cliente.nombre}}</a>
         -Estado: {{ p.estado}}
         -Fecha: {{p.fecha|date:"d/m/y"}}
-        -Productos: {{p.total_productos.count}}
+        -Productos: {{p.total_productos|default:"0"}}
+        -Total: ${{p.total_precio|default:"0.00"}}
 
 
     </li>

@@ -5,12 +5,12 @@
 {% block content %}
 <h1>¡Producto!</h1>
 <p> 
-<a href="{% url 'tienda:crear_producto' %}"> Nuevo producto</a>
+<a href="{% url 'tienda:crear_producto' %}"class="btn primary"> Nuevo producto</a>
 </p>
 <ul>
     {% for p in productos %}
     <li>
-        <a href="{% url 'tienda:detalle_producto' p.pk %}">{{p.nombre}}</a>
+        <a href="{% url 'tienda:detalle_producto' p.pk %}"class="btn primary">{{p.nombre}}</a>
         - ${{ p.precio|floatformat:2 }}
     </li>
     {%endfor%}
