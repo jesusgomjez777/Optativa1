@@ -43,10 +43,11 @@ def eliminar_pedido(request, pk):
     return render(request, "tienda/eliminar_pedido.html", {"pedido": pedido})
 
 @transaction.atomic
-def crear_pedido_items(request, cliente_pk):
+def crear_pedido_items(request):
     if request.method == "POST":
         pedido_form = PedidoSimpleForm(request.POST)
         if pedido_form.is_valid():
+            pedido = pedido_form.save()
             formset = PedidoItemFormSet(request.POST, instance=pedido)
             if formset.is_valid():
                 formset.save()
@@ -61,7 +62,8 @@ def crear_pedido_items(request, cliente_pk):
     
     productos = Producto.objects.all()
     productos_dict = {str(p.id): float(p.precio) for p in productos}
-    return render(request, "tienda/crear_pedido_items", {
+    return render(request, "tienda/crear_pedido_items.html", {
+        "pedido": pedido,
         "pedido_form": pedido_form,
         "formset": formset,
         "productos_dict": productos_dict
@@ -74,7 +76,7 @@ def editar_pedido_items(request, pk):
     pedido = get_object_or_404(Pedido, pk=pk)
 
     if request.method == "POST":
-        pedido_form = PedidoSimepleForm(request.POST, instance=pedido)
+        pedido_form = PedidoSimpleForm(request.POST, instance=pedido)
         formset = PedidoItemFormSet(request.POST, instance=pedido)
         if pedido_form.is_valid(): 
             formset = PedidoItemFormSet(request.POST, instance=pedido)
@@ -83,10 +85,15 @@ def editar_pedido_items(request, pk):
                 formset.save()
                 return redirect("tienda:detalle_pedido", pk=pedido.pk)
     else:
-        pedido_form = PedidoSimepleForm(instance=pedido)
+        pedido_form = PedidoSimpleForm(instance=pedido)
         formset = PedidoItemFormSet(instance=pedido)
-
-    return render(request, "tienda/editar_pedido_items.html", {"pedido_form": pedido_form, "formset": formset, "productos_dict": productos_dict})
+    productos = Producto.objects.all()
+    productos_dict = {str(p.id): float(p.precio) for p in productos}
+    return render(request, "tienda/editar_pedido_items.html", {
+        "pedido": pedido,
+        "pedido_form": pedido_form, 
+        "formset": formset, 
+        "productos_dict": productos_dict})
 
 def crear_cliente(request):
     if request.method == "POST":

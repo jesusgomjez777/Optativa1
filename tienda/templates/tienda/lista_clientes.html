@@ -5,10 +5,13 @@
 {% block content %}
 
 <h1>Clientes</h1>
+<p> 
+    <a href="{% url 'tienda:crear_cliente' %}" class="btn primary">Nuevo Cliente</a>
+</p>
 <ul>
   {% for cliente in clientes %}
     <li>
-      <a href="{% url 'tienda:detalle_cliente' cliente.pk %}">
+      <a href="{% url 'tienda:detalle_cliente' cliente.pk %}" class="btn primary">
         {{ cliente.nombre }}
       </a>
       - {{ cliente.correo }}

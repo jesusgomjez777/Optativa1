@@ -11,15 +11,18 @@
 
 
 <h3>Productos</h3>
-<ul>
-    {% ifitem %}
+{% if items %}
         <table class="tabla">
-            <tr>
-                <th class="encabezado">Producto</th>
-                <th class="encabezado">Cantidad</th>
-                <th class="encabezado">Precio Unitario</th>
-                <th class="encabezado">Subtotal</th>
-            </tr>
+            <thead>
+                <tr>
+                    <th class="encabezado">Producto</th>
+                    <th class="encabezado">Cantidad</th>
+                    <th class="encabezado">Precio Unitario</th>
+                    <th class="encabezado">Subtotal</th>
+                </tr>
+            </thead>
+
+            <tbody>
             {% for it in items %}
              <tr>
                 <td>{{ it.producto.nombre }}</td>
@@ -27,9 +30,28 @@
                 <td>${{ it.precio_unitario|floatformat:2 }}</td>
                 <td>${{ it.inline_total|floatformat:2 }}</td>
              </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">Este pedido no tiene items.</td>
+                </tr>
             {% endfor %}
+            
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">Total a pagar:</td>
+                    <td> ${{ total_pedido|floatformat:2 }}</td>
+                </tr>
+            </tfoot>
         </table>
-     {% else %}
-    {% endif %}
-</ul>
+{% else %}
+    <p>Este pedido aun no tiene items.</p>
+{% endif %}
+
+<p>
+    <a href="{% url 'tienda:editar_pedido_items' pedido.pk %}" class="btn primary">Editar pedidos</a>
+    <a href="{% url 'tienda:eliminar_pedido' pedido.pk %}" class="btn delate">Eliminar pedidos</a>
+    <a href="{% url 'tienda:lista_pedidos' %}" class="btn primary">Volver a la lista</a>
+</p>
+
 {% endblock %}
